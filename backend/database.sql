@@ -1,0 +1,11 @@
+CREATE DATABASE IF NOT EXISTS PyGame;
+
+USE PyGame;
+
+CREATE TABLE Users (
+    User_id int NOT NULL AUTO_INCREMENT,
+    Navn VARCHAR(32) NOT NULL,
+    Email VARCHAR(50) NOT NULL,
+    Telefonnummer VARCHAR(8) NOT NULL,
+    PRIMARY KEY (User_id)
+);
