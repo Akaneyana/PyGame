@@ -15,7 +15,7 @@ CREATE TABLE Users (
 CREATE TABLE ReactionTime (
     RT_Score_Id int NOT NULL AUTO_INCREMENT,
     User_id int NOT NULL,
-    RT_Score CHAR(7) NOT NULL,
+    RT_Score VARCHAR(7) NOT NULL,
     Score_set TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (RT_Score_Id),
     FOREIGN KEY (User_id) REFERENCES Users(User_id)
