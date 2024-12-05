@@ -1,15 +1,22 @@
 import pygame
 import sys
-import subprocess
 import os
+from frontend.games.ReactionTimeGame import ReactionTime  # Import the Reaction Time game logic
+
+# Determine the base path for accessing files in the bundled app or during development
+if getattr(sys, 'frozen', False):  # Check if running as a bundled executable
+    base_path = sys._MEIPASS
+else:
+    base_path = os.getcwd()
 
 pygame.init()
 
+# Screen configuration
 res = (720, 720)
-
 screen = pygame.display.set_mode(res)
 pygame.display.set_caption("Main Menu")
 
+# Colors
 white = (255, 255, 255)
 gray = (200, 200, 200)
 dark_gray = (100, 100, 100)
@@ -27,15 +34,15 @@ running = True
 while running:
     screen.fill(white)
 
-
+    # Get mouse position
     mouse_x, mouse_y = pygame.mouse.get_pos()
 
+    # Define button area and hover logic
     button_rect = pygame.Rect(button_position, button_size)
     if button_rect.collidepoint(mouse_x, mouse_y):
         color = button_hover_color
-    else :
+    else:
         color = button_color
-
 
     pygame.draw.rect(screen, color, button_rect)
     text_rect = button_text.get_rect(center=button_rect.center)
@@ -46,12 +53,9 @@ while running:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if button_rect.collidepoint(mouse_x, mouse_y):
-                game_path = os.path.join(os.getcwd(),"frontend", "games", "ReactionTime.py")
-                try:
-                    subprocess.run(["python", game_path])
-                except FileNotFoundError:
-                    print(f"Error: The file {game_path} was not found")
-    
+                # Run the Reaction Time game using the existing screen
+                ReactionTime.start_reaction_time_game(screen)
+
     pygame.display.flip()
 
 pygame.quit()
