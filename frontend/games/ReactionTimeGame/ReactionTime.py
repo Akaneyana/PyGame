@@ -1,7 +1,8 @@
-
 import pygame
 import time
 import random
+from backend.databaseConnection import save_reaction_time
+
 
 # Colors
 white = (255, 255, 255)
@@ -11,7 +12,6 @@ black = (0, 0, 0)
 red = (255, 4, 4)
 yellow = (255, 252, 4)
 green = (8, 252, 4)
-
 
 def start_reaction_time_game(screen):
     """Run the Reaction Time game on the provided Pygame screen."""
@@ -38,9 +38,6 @@ def start_reaction_time_game(screen):
     early = main_font.render("Clicked Too Early", True, black)
     early_rect = early.get_rect(center=(screen_width // 2, screen_height // 2))
 
-    # Score display rect
-    score_rect = pygame.Rect(screen_width // 2, screen_height // 2, 0, 0)
-
     # Back button setup
     button_size = (120, 50)
     button_position = (10, 10)
@@ -51,6 +48,7 @@ def start_reaction_time_game(screen):
     start_time, end_time = 0, 0
     waiting_start_time = 0
     delay_time = 0
+    reaction_time = None
 
     running = True
     while running:
@@ -109,9 +107,12 @@ def start_reaction_time_game(screen):
             screen.fill(red)
             screen.blit(early, early_rect)
         elif game_state == "Showing Results":
-            reaction_time = round((end_time - start_time) * 1000)
+            reaction_time = round((end_time - start_time) * 1000)  # Reaction time in milliseconds
             score_text = main_font.render(f"Speed: {reaction_time} ms", True, black)
-            score_rect = score_text.get_rect(center=(screen_width // 2, screen_height // 2))
-            screen.blit(score_text, score_rect)
+            screen.blit(score_text, click_to_start_rect)
+
+            # Save reaction time directly to the database
+            user_id = 1  # Placeholder user ID
+            save_reaction_time(user_id, reaction_time)
 
         pygame.display.update()
