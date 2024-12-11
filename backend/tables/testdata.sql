@@ -1,5 +1,5 @@
-INSERT INTO Users (Name, Email, Phone_number) VALUES(
-    'Test', 'test@test', '87654321'
+INSERT INTO Users (Name, Password, Email, Phone_number) VALUES(
+    'Test', 'testing', 'test@test', '87654321'
 );
 
 INSERT INTO ReactionTime (User_id, RT_Score) VALUES(

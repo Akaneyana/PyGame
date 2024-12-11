@@ -17,7 +17,7 @@ def get_connection():
         host = os.getenv("DB_HOST")
         user = os.getenv("DB_USER")
         password = os.getenv("DB_PASSWORD")
-        database = os.getenv("DB_NAME")
+        database = os.getenv("DB_DATABASE")
 
         # Establish and return the database connection
         return mysql.connector.connect(
@@ -44,7 +44,7 @@ def save_reaction_time(user_id, reaction_time):
 
         # Insert the reaction time score into the ReactionTime table
         query = """
-            INSERT INTO ReactionTime (User_id, RT_Score)
+            INSERT INTO ReactionTime (User_id, Reaction_Time_ms)
             VALUES (%s, %s)
         """
         cursor.execute(query, (user_id, reaction_time))

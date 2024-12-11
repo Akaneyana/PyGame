@@ -3,7 +3,6 @@ import time
 import random
 from backend.databaseConnection import save_reaction_time
 
-
 # Colors
 white = (255, 255, 255)
 gray = (200, 200, 200)
@@ -49,6 +48,7 @@ def start_reaction_time_game(screen):
     waiting_start_time = 0
     delay_time = 0
     reaction_time = None
+    score_saved = False  # Flag to track whether the score has been saved
 
     running = True
     while running:
@@ -78,6 +78,7 @@ def start_reaction_time_game(screen):
                     game_state = "Showing Results"
                 elif game_state == "Too Early" or game_state == "Showing Results":
                     game_state = "Click to Start"
+                    score_saved = False  # Reset the score flag for a new game
 
         # Screen background
         screen.fill(white)
@@ -111,8 +112,9 @@ def start_reaction_time_game(screen):
             score_text = main_font.render(f"Speed: {reaction_time} ms", True, black)
             screen.blit(score_text, click_to_start_rect)
 
-            # Save reaction time directly to the database
-            user_id = 1  # Placeholder user ID
-            save_reaction_time(user_id, reaction_time)
+            if not score_saved:  # Save the score only once
+                user_id = 1  # Placeholder user ID
+                save_reaction_time(user_id, reaction_time)
+                score_saved = True  # Set the flag after saving
 
         pygame.display.update()
