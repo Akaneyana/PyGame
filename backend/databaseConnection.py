@@ -1,7 +1,8 @@
 import mysql.connector
-from mysql.connector import Error  # Import the Error class for better error handling
+from mysql.connector import Error
 from dotenv import load_dotenv
 import os
+import hashlib
 
 # Load environment variables from the .env file
 load_dotenv()
@@ -13,13 +14,11 @@ def get_connection():
         A MySQL database connection object.
     """
     try:
-        # Retrieve database connection parameters
         host = os.getenv("DB_HOST")
         user = os.getenv("DB_USER")
         password = os.getenv("DB_PASSWORD")
         database = os.getenv("DB_DATABASE")
-
-        # Establish and return the database connection
+        
         return mysql.connector.connect(
             host=host,
             user=user,
@@ -28,7 +27,45 @@ def get_connection():
         )
     except Error as err:
         print(f"Error connecting to the database: {err}")
-        raise  # Re-raise the exception for debugging or logging purposes
+        raise
+
+def register_user(name, password, email, phone):
+    """
+    Register a new user by inserting the provided details into the database.
+    The password will be hashed before saving to the database.
+    
+    Args:
+        name (str): The user's name.
+        password (str): The user's plain text password.
+        email (str): The user's email address.
+        phone (str): The user's phone number.
+    """
+    try:
+        # Hash the password using SHA-256
+        hashed_password = hashlib.sha256(password.encode('utf-8')).hexdigest()
+
+        # Establish the database connection
+        db = get_connection()
+        cursor = db.cursor()
+
+        # Insert the user data into the Users table
+        query = """
+            INSERT INTO Users (Name, Password_hash, Email, Phone)
+            VALUES (%s, %s, %s, %s)
+        """
+        cursor.execute(query, (name, hashed_password, email, phone))
+
+        # Commit the transaction
+        db.commit()
+
+        print("User registered successfully!")
+    except Error as err:
+        print(f"Error: {err}")
+    finally:
+        if cursor:
+            cursor.close()
+        if db:
+            db.close()
 
 def save_reaction_time(user_id, reaction_time):
     """
@@ -38,25 +75,21 @@ def save_reaction_time(user_id, reaction_time):
         reaction_time (float): The reaction time score in milliseconds.
     """
     try:
-        # Establish the database connection
         db = get_connection()
         cursor = db.cursor()
 
-        # Insert the reaction time score into the ReactionTime table
+        # Insert the reaction time into the ReactionTime table
         query = """
             INSERT INTO ReactionTime (User_id, Reaction_Time_ms)
             VALUES (%s, %s)
         """
         cursor.execute(query, (user_id, reaction_time))
 
-        # Commit the transaction
         db.commit()
-
-        print("Reaction time score saved successfully!")
+        print("Reaction time saved successfully!")
     except Error as err:
         print(f"Error: {err}")
     finally:
-        # Ensure the cursor and connection are closed even if an error occurs
         if cursor:
             cursor.close()
         if db:
