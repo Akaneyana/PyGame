@@ -117,5 +117,5 @@ CREATE TABLE ReactionTime (
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/Akaneyana/PyGame/tree/main?tab=MIT-1-ov-file#MIT-1-ov-file) file for details.
 
