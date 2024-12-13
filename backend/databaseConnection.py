@@ -1,8 +1,8 @@
 import mysql.connector
 from mysql.connector import Error
+import hashlib
 from dotenv import load_dotenv
 import os
-import hashlib
 
 # Load environment variables from the .env file
 load_dotenv()
@@ -29,6 +29,50 @@ def get_connection():
         print(f"Error connecting to the database: {err}")
         raise
 
+def verify_user_credentials(email, password):
+    """
+    Verify the user's credentials against the database.
+    
+    Args:
+        email (str): The user's email.
+        password (str): The user's plain-text password.
+    
+    Returns:
+        bool: True if credentials are valid, False otherwise.
+    """
+    try:
+        # Hash the provided password
+        hashed_password = hashlib.sha256(password.encode('utf-8')).hexdigest()
+
+        # Establish the database connection
+        db = get_connection()
+        cursor = db.cursor()
+
+        # Query to fetch the user's data based on the email
+        query = "SELECT Password_hash FROM Users WHERE Email = %s"
+        cursor.execute(query, (email,))
+        result = cursor.fetchone()
+
+        # If no result is found, the email doesn't exist
+        if not result:
+            return False
+
+        # Check if the hashed password matches the one in the database
+        stored_password_hash = result[0]
+        if stored_password_hash == hashed_password:
+            return True
+        else:
+            return False
+
+    except Error as err:
+        print(f"Error: {err}")
+        return False
+    finally:
+        if cursor:
+            cursor.close()
+        if db:
+            db.close()
+
 def register_user(name, password, email, phone):
     """
     Register a new user by inserting the provided details into the database.
@@ -41,7 +85,7 @@ def register_user(name, password, email, phone):
         phone (str): The user's phone number.
     """
     try:
-        # Hash the password using SHA-256
+        # Hash the password
         hashed_password = hashlib.sha256(password.encode('utf-8')).hexdigest()
 
         # Establish the database connection
@@ -66,6 +110,7 @@ def register_user(name, password, email, phone):
             cursor.close()
         if db:
             db.close()
+
 
 def save_reaction_time(user_id, reaction_time):
     """

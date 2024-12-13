@@ -1,7 +1,7 @@
 import pygame
 import time
 import random
-from backend.databaseConnection import save_reaction_time
+from backend.databaseConnection import save_reaction_time  # Import the function to save the score
 
 # Colors
 white = (255, 255, 255)
@@ -12,7 +12,7 @@ red = (255, 4, 4)
 yellow = (255, 252, 4)
 green = (8, 252, 4)
 
-def start_reaction_time_game(screen):
+def start_reaction_time_game(screen, user_id):
     """Run the Reaction Time game on the provided Pygame screen."""
     # Get screen dimensions
     screen_width, screen_height = screen.get_size()
@@ -55,7 +55,7 @@ def start_reaction_time_game(screen):
         # Get mouse position
         mouse_x, mouse_y = pygame.mouse.get_pos()
 
-        # Button hover logic
+        # Button color and hover logic
         button_color = gray
         if back_button_rect.collidepoint(mouse_x, mouse_y):
             button_color = dark_gray
@@ -113,8 +113,7 @@ def start_reaction_time_game(screen):
             screen.blit(score_text, click_to_start_rect)
 
             if not score_saved:  # Save the score only once
-                user_id = 1  # Placeholder user ID
-                save_reaction_time(user_id, reaction_time)
+                save_reaction_time(user_id, reaction_time)  # Save reaction time for the logged-in user
                 score_saved = True  # Set the flag after saving
 
         pygame.display.update()
