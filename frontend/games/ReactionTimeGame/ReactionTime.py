@@ -12,6 +12,10 @@ red = (255, 4, 4)
 yellow = (255, 252, 4)
 green = (8, 252, 4)
 
+# Frame rate
+clock = pygame.time.Clock()
+FPS = 60
+
 def start_reaction_time_game(screen, user_id):
     """Run the Reaction Time game on the provided Pygame screen."""
     # Get screen dimensions
@@ -117,3 +121,6 @@ def start_reaction_time_game(screen, user_id):
                 score_saved = True  # Set the flag after saving
 
         pygame.display.update()
+
+        # caps the frame rate at the FPS value which is 60
+        clock.tick(FPS)

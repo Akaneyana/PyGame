@@ -33,7 +33,7 @@ def login_page(screen):
                     box["active"] = box["rect"].collidepoint(event.pos)
 
                 # Check button clicks
-                if draw_button(screen, back_button_rect, "Back to Main Menu"):
+                if draw_button(screen, back_button_rect, "Back"):
                     return  # Exit to the main menu
                 elif draw_button(screen, login_button_rect, "Login"):
                     # Extract input data
@@ -64,7 +64,7 @@ def login_page(screen):
 
         # Draw buttons
         draw_button(screen, login_button_rect, "Login")
-        draw_button(screen, back_button_rect, "Back to Main Menu")
+        draw_button(screen, back_button_rect, "Back")
         draw_button(screen, signup_button_rect, "Go to Signup")
 
         pygame.display.flip()
