@@ -1,8 +1,9 @@
 import pygame
 import sys
 import os
-from frontend.games.reactionTimeGame import reactionTime  # Import the Reaction Time game logic
+from frontend.games.reactionTimeGame import ReactionTime  # Import the Reaction Time game logic
 from frontend.user.loginPage import login_page  # Import the login page function
+from frontend.games.typingGame import TypingGame # Import the Typing Game logic
 
 # Determine the base path for accessing files in the bundled app or during development
 if getattr(sys, 'frozen', False):  # Check if running as a bundled executable
@@ -29,10 +30,12 @@ game_button_size = (200, 60)
 
 font = pygame.font.Font(None, 36)
 reaction_time_text = font.render("Reaction Time", True, black)
+typing_game_text = font.render("Typing Game", True, black)
 login_page_text = font.render("Login Page", True, black)
 
 # Button positions
-reaction_time_button_position = (250, 300)
+reaction_time_button_position = (250, 150)
+typing_game_button_position = (250, 250)
 login_page_button_position = (525, 30)
 
 # Frame Rate
@@ -46,12 +49,19 @@ while running:
     # Get mouse position
     mouse_x, mouse_y = pygame.mouse.get_pos()
 
-    # Reaction Time button
+    # Reaction Time Game button
     reaction_time_button_rect = pygame.Rect(reaction_time_button_position, game_button_size)
     reaction_time_color = button_hover_color if reaction_time_button_rect.collidepoint(mouse_x, mouse_y) else button_color
     pygame.draw.rect(screen, reaction_time_color, reaction_time_button_rect)
     reaction_time_text_rect = reaction_time_text.get_rect(center=reaction_time_button_rect.center)
     screen.blit(reaction_time_text, reaction_time_text_rect)
+
+    # Typing Game Button
+    typing_game_button_rect = pygame.Rect(typing_game_button_position, game_button_size)  # FIXED
+    typing_game_color = button_hover_color if typing_game_button_rect.collidepoint(mouse_x, mouse_y) else button_color
+    pygame.draw.rect(screen, typing_game_color, typing_game_button_rect)
+    typing_game_text_rect = typing_game_text.get_rect(center=typing_game_button_rect.center)
+    screen.blit(typing_game_text, typing_game_text_rect)
 
     # Login Page button
     login_page_button_rect = pygame.Rect(login_page_button_position, button_size)
@@ -66,9 +76,12 @@ while running:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if reaction_time_button_rect.collidepoint(mouse_x, mouse_y):
-                reactionTime.start_reaction_time_game(screen, 1)  # Navigate to Reaction Time game
+                ReactionTime.start_reaction_time_game(screen, 1)  # Navigate to Reaction Time game
+            elif typing_game_button_rect.collidepoint(mouse_x, mouse_y):  # FIXED
+                TypingGame.start_typing_game(screen)  # Navigate to Typing Game
             elif login_page_button_rect.collidepoint(mouse_x, mouse_y):
                 login_page(screen)  # Navigate to Login Page
+
 
     pygame.display.flip()
     
