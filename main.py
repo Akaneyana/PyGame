@@ -3,7 +3,7 @@ import sys
 import os
 from frontend.games.reactionTimeGame import ReactionTime  # Import the Reaction Time game logic
 from frontend.user.loginPage import login_page  # Import the login page function
-from frontend.games.typingGame import TypingGame # Import the Typing Game logic
+from frontend.games.typingGame.TypingGame import TypingGame  # Import the Typing Game class
 
 # Determine the base path for accessing files in the bundled app or during development
 if getattr(sys, 'frozen', False):  # Check if running as a bundled executable
@@ -15,7 +15,7 @@ pygame.init()
 # Screen configuration
 res = (720, 720)
 screen = pygame.display.set_mode(res)
-pygame.display.set_caption("")
+pygame.display.set_caption("Game Selection")
 
 # Colors
 white = (255, 255, 255)
@@ -57,7 +57,7 @@ while running:
     screen.blit(reaction_time_text, reaction_time_text_rect)
 
     # Typing Game Button
-    typing_game_button_rect = pygame.Rect(typing_game_button_position, game_button_size)  # FIXED
+    typing_game_button_rect = pygame.Rect(typing_game_button_position, game_button_size)
     typing_game_color = button_hover_color if typing_game_button_rect.collidepoint(mouse_x, mouse_y) else button_color
     pygame.draw.rect(screen, typing_game_color, typing_game_button_rect)
     typing_game_text_rect = typing_game_text.get_rect(center=typing_game_button_rect.center)
@@ -77,15 +77,15 @@ while running:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if reaction_time_button_rect.collidepoint(mouse_x, mouse_y):
                 ReactionTime.start_reaction_time_game(screen, 1)  # Navigate to Reaction Time game
-            elif typing_game_button_rect.collidepoint(mouse_x, mouse_y):  # FIXED
-                TypingGame.start_typing_game(screen)  # Navigate to Typing Game
+            elif typing_game_button_rect.collidepoint(mouse_x, mouse_y):
+                game = TypingGame()  # Instantiate TypingGame
+                game.start_typing_game()  # Start Typing Game
             elif login_page_button_rect.collidepoint(mouse_x, mouse_y):
                 login_page(screen)  # Navigate to Login Page
 
-
     pygame.display.flip()
     
-    # caps the frame rate at the FPS value which is 60
+    # Caps the frame rate at the FPS value, which is 60
     clock.tick(FPS)
 
 pygame.quit()
