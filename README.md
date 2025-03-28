@@ -112,9 +112,6 @@ CREATE TABLE ReactionTime (
 - **Open Source Community**: 
   - A huge thanks to the open-source community for their contributions and support. This project wouldn't be possible without the contributions of countless developers.
 
-- **Mentors and Peers**: 
-  - Special thanks to my mentors and peers who provided valuable feedback and guidance throughout the development of this project.
-
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](https://github.com/Akaneyana/PyGame/tree/main?tab=MIT-1-ov-file#MIT-1-ov-file) file for details.
