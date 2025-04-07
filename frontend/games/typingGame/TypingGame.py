@@ -10,9 +10,9 @@ pygame.init()
 WIDTH, HEIGHT = 800, 600
 FPS = 60
 FONT_SIZE = 48
-TEXT_COLOR = (255, 255, 255)
-BACKGROUND_COLOR = (0, 0, 0)
-TIME_LIMIT = 30  # Total time limit in seconds
+TEXT_COLOR = (0, 0, 0)
+BACKGROUND_COLOR = (255, 255, 255)
+TIME_LIMIT = 10  # Total time limit in seconds
 
 class TypingGame:
     def __init__(self):

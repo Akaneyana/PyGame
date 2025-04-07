@@ -1,15 +1,16 @@
 import pygame
 import sys
 import os
-from frontend.games.reactionTimeGame import ReactionTime  # Import the Reaction Time game logic
-from frontend.user.loginPage import login_page  # Import the login page function
-from frontend.games.typingGame.TypingGame import TypingGame  # Import the Typing Game class
+from frontend.games.reactionTimeGame import ReactionTime
+from frontend.user.loginPage import login_page
+from frontend.games.typingGame.TypingGame import TypingGame
 
-# Determine the base path for accessing files in the bundled app or during development
-if getattr(sys, 'frozen', False):  # Check if running as a bundled executable
+# Determine base path for resource access
+if getattr(sys, 'frozen', False):
     base_path = sys._MEIPASS
 else:
     base_path = os.getcwd()
+
 pygame.init()
 
 # Screen configuration
@@ -41,6 +42,9 @@ login_page_button_position = (525, 30)
 # Frame Rate
 clock = pygame.time.Clock()
 FPS = 60
+
+# Default user ID if not logged in
+logged_in_user_id = 1  # Default to User_Id 1
 
 running = True
 while running:
@@ -76,16 +80,17 @@ while running:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if reaction_time_button_rect.collidepoint(mouse_x, mouse_y):
-                ReactionTime.start_reaction_time_game(screen, 1)  # Navigate to Reaction Time game
+                ReactionTime.start_reaction_time_game(screen, logged_in_user_id)
             elif typing_game_button_rect.collidepoint(mouse_x, mouse_y):
-                game = TypingGame()  # Instantiate TypingGame
-                game.start_typing_game()  # Start Typing Game
+                game = TypingGame()
+                game.start_typing_game()
             elif login_page_button_rect.collidepoint(mouse_x, mouse_y):
-                login_page(screen)  # Navigate to Login Page
+                user_id = login_page(screen)
+                if user_id:
+                    logged_in_user_id = user_id  # Update logged-in user ID
 
     pygame.display.flip()
     
-    # Caps the frame rate at the FPS value, which is 60
     clock.tick(FPS)
 
 pygame.quit()

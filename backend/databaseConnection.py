@@ -4,14 +4,12 @@ import hashlib
 from dotenv import load_dotenv
 import os
 
-# Load environment variables from the .env file
+# Load environment variables
 load_dotenv()
 
 def get_connection():
     """
     Establish a connection to the database using parameters from the .env file.
-    Returns:
-        A MySQL database connection object.
     """
     try:
         host = os.getenv("DB_HOST")
@@ -24,8 +22,8 @@ def get_connection():
             user=user,
             password=password,
             database=database,
-            charset="utf8mb4",  # Ensure MariaDB-compatible character set
-            collation="utf8mb4_general_ci"  # Use a compatible collation
+            charset="utf8mb4",
+            collation="utf8mb4_general_ci"
         )
     except Error as err:
         print(f"Error connecting to the database: {err}")
@@ -33,37 +31,58 @@ def get_connection():
 
 def verify_user_credentials(email, password):
     """
-    Verify the user's credentials against the database.
-    
-    Args:
-        email (str): The user's email.
-        password (str): The user's plain-text password.
-    
-    Returns:
-        bool: True if credentials are valid, False otherwise.
+    Verify the user's credentials and return the user ID if successful.
     """
     try:
         hashed_password = hashlib.sha256(password.encode('utf-8')).hexdigest()
         db = get_connection()
         cursor = db.cursor()
 
-        query = "SELECT Password_hash FROM Users WHERE Email = %s"
-        cursor.execute(query, (email,))
+        query = "SELECT User_Id FROM Users WHERE Email = %s AND Password_hash = %s"
+        cursor.execute(query, (email, hashed_password))
         result = cursor.fetchone()
 
-        if not result:
-            return False
-
-        return result[0] == hashed_password
+        if result:
+            user_id = result[0]
+            update_last_logged_in(user_id)
+            return user_id
+        return None
 
     except Error as err:
         print(f"Error: {err}")
-        return False
+        return None
     finally:
         if 'cursor' in locals() and cursor:
             cursor.close()
         if 'db' in locals() and db:
             db.close()
+
+def update_last_logged_in(user_id):
+    """
+    Update the Users table to store the last logged-in user's timestamp.
+    """
+    try:
+        db = get_connection()
+        cursor = db.cursor()
+
+        query = """
+            UPDATE Users 
+            SET Last_Logged_In = NOW()
+            WHERE User_Id = %s
+        """
+        cursor.execute(query, (user_id,))
+        db.commit()
+        print(f"User {user_id} marked as last logged in.")
+
+    except Error as err:
+        print(f"Error updating last logged-in user: {err}")
+    finally:
+        if 'cursor' in locals() and cursor:
+            cursor.close()
+        if 'db' in locals() and db:
+            db.close()
+
+
 
 def register_user(name, password, email, phone):
     """
