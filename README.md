@@ -109,15 +109,10 @@ CREATE TABLE TypingGame (
 ### Columms:
 
 - **TG_Score_Id**: Primary key, auto-incremented unique identifier for each typing score entry.
-
 - **User_Id**: Foreign key referencing the`1User_Id` in the `Users` table. Identifies the user who completed the typing test.
-
 - **Words_Per_Minute**: Number of words typed per minute, representing the user's typing speed.
-
 - **Score_Time**: Number of words typed per minute, representing the user's typing speed.
-
 - **Primary Key**: `TG_Score_Id`, ensures uniqueness of score entries.
-
 - **Foreign Key**: Ensures only valid users can have associated scores.
 ---
 
