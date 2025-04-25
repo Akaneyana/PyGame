@@ -65,6 +65,7 @@ CREATE TABLE Users (
 - **created_at**: Timestamp of account creation.
 - **last_login**: Automatically updates on each login.
 
+---
 
 ### 🎮 ReactionTime Table
 
@@ -89,6 +90,36 @@ CREATE TABLE ReactionTime (
 - **Primary Key**: `RT_Score_Id`, ensures that each record is unique and can be queried efficiently.
 - **Foreign Key**: `User_Id`, links each score to a specific user in the `Users` table, ensuring the validity of the relationship.
 
+---
+
+### ⌨️ TypingGame Table
+
+The `TypingGame` table stores data related to the Typing Speed game, tracking how fast a user can type in words per minute (WPM). Each entry is tied to a specific user and timestamped.
+
+```sql
+CREATE TABLE TypingGame (
+    TG_Score_Id INT NOT NULL AUTO_INCREMENT,
+    User_Id INT NOT NULL,
+    Words_Per_Minute INT NOT NULL,
+    Score_Time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (TG_Score_Id),
+    FOREIGN KEY (User_Id) REFERENCES Users(User_Id)
+);
+```
+### Columms:
+
+- **TG_Score_Id**: Primary key, auto-incremented unique identifier for each typing score entry.
+
+- **User_Id**: Foreign key referencing the`1User_Id` in the `Users` table. Identifies the user who completed the typing test.
+
+- **Words_Per_Minute**: Number of words typed per minute, representing the user's typing speed.
+
+- **Score_Time**: Number of words typed per minute, representing the user's typing speed.
+
+- **Primary Key**: `TG_Score_Id`, ensures uniqueness of score entries.
+
+- **Foreign Key**: Ensures only valid users can have associated scores.
+---
 
 ## 🚀 Future Plans
 
@@ -107,7 +138,7 @@ CREATE TABLE ReactionTime (
   - The game was built using [Pygame](https://www.pygame.org/), an excellent library for developing 2D games in Python.
 
 - **MySQL**: 
-  - We use [MySQL](https://www.mysql.com/) for the database to store user data and reaction time scores efficiently.
+  - We use [MySQL](https://www.mysql.com/) for the database to store user data and scores efficiently.
 
 - **Open Source Community**: 
   - A huge thanks to the open-source community for their contributions and support. This project wouldn't be possible without the contributions of countless developers.
