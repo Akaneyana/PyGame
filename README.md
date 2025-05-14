@@ -68,7 +68,7 @@ CREATE TABLE Users (
 
 ---
 
-### 🎮 ReactionTime Table
+### ReactionTime Table
 
 The `ReactionTime` table is designed to track users' scores in the Reaction Time game. It records reaction times in milliseconds and associates each score with a user via a foreign key relationship.
 
@@ -93,7 +93,7 @@ CREATE TABLE ReactionTime (
 
 ---
 
-### ⌨️ TypingGame Table
+### TypingGame Table
 
 The `TypingGame` table stores data related to the Typing Speed game, tracking how fast a user can type in words per minute (WPM). Each entry is tied to a specific user and timestamped.
 
