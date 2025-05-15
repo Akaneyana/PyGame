@@ -58,12 +58,27 @@ def handle_input_event(event, input_boxes):
         event (pygame.event.Event): The event to handle.
         input_boxes (list): A list of input box dictionaries.
     """
+    pygame.key.set_repeat(300, 50)  # Enable key repeat (300ms delay, then 50ms interval)
+    
     for box in input_boxes:
+        if box["active"]:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_BACKSPACE:
+                    box["text"] = box["text"][:-1]  
+                elif event.key == pygame.K_RETURN:
+                    box["active"] = False  
+                else:
+                    box["text"] += event.unicode
+
+
+    
+"""     for box in input_boxes:
         if box["active"]:
             if event.key == pygame.K_BACKSPACE:
                 box["text"] = box["text"][:-1]
-            else:
-                box["text"] += event.unicode
+            else:l
+                box["text"] += event.unicode """
+
 
 def draw_button(screen, rect, text, font=BUTTON_FONT, color=gray, hover_color=dark_gray, text_color=black):
     """

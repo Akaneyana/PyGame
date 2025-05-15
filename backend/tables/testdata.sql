@@ -1,4 +1,4 @@
-INSERT INTO Users (Name, Password, Email, Phone_number) VALUES(
+INSERT INTO Users (Name, Password_hash, Email, Phone) VALUES(
     'Test', 'testing', 'test@test', '87654321'
 );
 

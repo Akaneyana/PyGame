@@ -1,9 +1,10 @@
 import pygame
 import sys
 import os
-from frontend.games.reactionTimeGame import ReactionTime
+from frontend.games.reactionTimeGame.ReactionTime import start_reaction_time_game
 from frontend.user.loginPage import login_page
-from frontend.games.typingGame.TypingGame import TypingGame
+from frontend.games.typingGame.TypingGame import start_typing_game
+
 
 # Determine base path for resource access
 if getattr(sys, 'frozen', False):
@@ -80,10 +81,9 @@ while running:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if reaction_time_button_rect.collidepoint(mouse_x, mouse_y):
-                ReactionTime.start_reaction_time_game(screen, logged_in_user_id)
+                start_reaction_time_game(screen, logged_in_user_id)
             elif typing_game_button_rect.collidepoint(mouse_x, mouse_y):
-                game = TypingGame()
-                game.start_typing_game()
+                start_typing_game(screen)
             elif login_page_button_rect.collidepoint(mouse_x, mouse_y):
                 user_id = login_page(screen)
                 if user_id:
