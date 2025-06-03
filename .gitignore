@@ -4,6 +4,5 @@
 .venv/
 
 build/
+test/
 dist/
-test/
-test/
