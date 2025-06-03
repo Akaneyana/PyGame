@@ -69,40 +69,24 @@ def start_typing_game(screen, user_id=1):
     start_time = None
     last_wpm_update = 0
     wpm = 0
-<<<<<<< HEAD
     timer_expired = False
     end_screen_shown = False
-=======
-    running = True
->>>>>>> 11c438d2abe29c4b71eea8f85950349a10371db1
 
     back_button = pygame.Rect(10, 10, 100, 40)
     back_text = button_font.render("Back", True, BLACK)
 
-<<<<<<< HEAD
     while True:
-=======
-    while running:
->>>>>>> 11c438d2abe29c4b71eea8f85950349a10371db1
         screen.fill(WHITE)
         mouse_x, mouse_y = pygame.mouse.get_pos()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-<<<<<<< HEAD
                 pygame.quit()
                 return
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if back_button.collidepoint(mouse_x, mouse_y):
                     return
             elif event.type == pygame.KEYDOWN and not timer_expired:
-=======
-                running = False
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                if back_button.collidepoint(mouse_x, mouse_y):
-                    return
-            elif event.type == pygame.KEYDOWN:
->>>>>>> 11c438d2abe29c4b71eea8f85950349a10371db1
                 if event.key == pygame.K_BACKSPACE:
                     input_text = input_text[:-1]
                 elif event.key == pygame.K_RETURN:
@@ -130,16 +114,11 @@ def start_typing_game(screen, user_id=1):
                             if input_text[i] == current_target[i])
         total_correct_chars = correct_chars
 
-<<<<<<< HEAD
         # Timer and WPM update
-=======
-        # Timer
->>>>>>> 11c438d2abe29c4b71eea8f85950349a10371db1
         if start_time:
             elapsed = time.time() - start_time
             remaining = max(0, TIME_LIMIT - elapsed)
 
-<<<<<<< HEAD
             if remaining <= 0 and not timer_expired:
                 final_wpm = calculate_wpm(total_correct_chars, start_time)
                 save_wpm_score(user_id, final_wpm)
@@ -153,26 +132,10 @@ def start_typing_game(screen, user_id=1):
             elif timer_expired:
                 # After timer expired, keep wpm frozen at final_wpm
                 wpm = final_wpm
-=======
-            # Update WPM only once per second
-            if time.time() - last_wpm_update >= 1:
-                wpm = calculate_wpm(total_correct_chars, start_time)
-                last_wpm_update = time.time()
->>>>>>> 11c438d2abe29c4b71eea8f85950349a10371db1
         else:
             remaining = TIME_LIMIT
             wpm = 0
 
-<<<<<<< HEAD
-=======
-        # Time’s up check
-        if remaining <= 0 and start_time is not None:
-            final_wpm = calculate_wpm(total_correct_chars, start_time)
-            show_results_screen(screen, final_wpm)
-            save_wpm_score(user_id, final_wpm)
-            start_time = None  # Stop the timer
-
->>>>>>> 11c438d2abe29c4b71eea8f85950349a10371db1
 
         # Render lines
         line_y = HEIGHT // 3
@@ -199,8 +162,4 @@ def start_typing_game(screen, user_id=1):
         pygame.display.flip()
         clock.tick(FPS)
 
-<<<<<<< HEAD
     pygame.quit()
-=======
-    pygame.quit()
->>>>>>> 11c438d2abe29c4b71eea8f85950349a10371db1
