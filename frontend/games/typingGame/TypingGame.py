@@ -2,12 +2,13 @@ import pygame
 import random
 import time
 import os
+from backend.databaseConnection import save_wpm_score
 
 # Constants
 WIDTH, HEIGHT = 800, 600
 FPS = 60
 FONT_SIZE = 36
-TIME_LIMIT = 10  # seconds
+TIME_LIMIT = 5  # seconds
 
 # Colors
 WHITE = (255, 255, 255)
@@ -15,6 +16,7 @@ BLACK = (0, 0, 0)
 GRAY = (160, 160, 160)
 DARK_GRAY = (100, 100, 100)
 BLUE = (50, 50, 255)
+RED = (255, 0, 0)
 
 def load_words(filename):
     file_path = os.path.join(os.path.dirname(__file__), filename)
@@ -24,26 +26,35 @@ def load_words(filename):
 def get_random_phrase(words, word_count=6):
     return ' '.join(random.choices(words, k=word_count))
 
-def calculate_wpm(input_text, start_time):
+def calculate_wpm(correct_char_count, start_time):
     if not start_time:
         return 0
     elapsed_time = time.time() - start_time
-    word_count = len(input_text) / 5
+    word_count = correct_char_count / 5
     return (word_count / elapsed_time) * 60 if elapsed_time > 0 else 0
 
 def render_colored_text(surface, font, target, input_text, x, y):
     for i, char in enumerate(target):
         if i < len(input_text):
-            color = BLACK if input_text[i] == char else (255, 0, 0)  # Red if mistyped
+            color = BLACK if input_text[i] == char else RED
         elif i == len(input_text):
-            color = BLUE  # Cursor position
+            color = BLUE  # Cursor indicator
         else:
             color = GRAY
         ch_surf = font.render(char, True, color)
         surface.blit(ch_surf, (x, y))
         x += ch_surf.get_width()
 
-def start_typing_game(screen):
+def show_results_screen(screen, final_wpm):
+    screen.fill(WHITE)
+    font = pygame.font.SysFont(None, 48)
+    message = font.render(f"Time's up! Final WPM: {int(final_wpm)}", True, BLACK)
+    message_rect = message.get_rect(center=(WIDTH // 2, HEIGHT // 2))
+    screen.blit(message, message_rect)
+    pygame.display.flip()
+    pygame.time.delay(3000)
+
+def start_typing_game(screen, user_id=1):
     pygame.display.set_caption("Typing Test Clone")
     clock = pygame.time.Clock()
     font = pygame.font.SysFont(None, FONT_SIZE)
@@ -77,9 +88,8 @@ def start_typing_game(screen):
                 if event.key == pygame.K_BACKSPACE:
                     input_text = input_text[:-1]
                 elif event.key == pygame.K_RETURN:
-                    pass  # Ignore Enter key
+                    pass
                 elif event.key == pygame.K_SPACE:
-                    # Only allow progressing if the line is fully and correctly typed
                     if input_text.strip() == target_lines[current_line_index]:
                         current_line_index += 1
                         input_text = ""
@@ -91,12 +101,39 @@ def start_typing_game(screen):
                     input_text += event.unicode
                     if not start_time:
                         start_time = time.time()
+                        last_wpm_update = start_time
 
-                # Check if line is typed correctly (but wait for space to move on)
                 if input_text.strip() == target_lines[current_line_index]:
                     line_complete = True
 
-        # Render target lines
+        # Live correct character count
+        current_target = target_lines[current_line_index]
+        correct_chars = sum(1 for i in range(min(len(input_text), len(current_target)))
+                            if input_text[i] == current_target[i])
+        total_correct_chars = correct_chars
+
+        # Timer
+        if start_time:
+            elapsed = time.time() - start_time
+            remaining = max(0, TIME_LIMIT - elapsed)
+
+            # Update WPM only once per second
+            if time.time() - last_wpm_update >= 1:
+                wpm = calculate_wpm(total_correct_chars, start_time)
+                last_wpm_update = time.time()
+        else:
+            remaining = TIME_LIMIT
+            wpm = 0
+
+        # Time’s up check
+        if remaining <= 0 and start_time is not None:
+            final_wpm = calculate_wpm(total_correct_chars, start_time)
+            show_results_screen(screen, final_wpm)
+            save_wpm_score(user_id, final_wpm)
+            start_time = None  # Stop the timer
+
+
+        # Render lines
         line_y = HEIGHT // 3
         for idx, line in enumerate(target_lines):
             if idx == current_line_index:
@@ -106,20 +143,7 @@ def start_typing_game(screen):
                 screen.blit(line_surface, (50, line_y))
             line_y += FONT_SIZE + 15
 
-        # Render timer & WPM
-        if start_time:
-            elapsed = time.time() - start_time
-            remaining = max(0, TIME_LIMIT - elapsed)
-
-            # Update WPM once every second
-            current_time = time.time()
-            if current_time - last_wpm_update >= 1:
-                wpm = calculate_wpm(input_text, start_time)
-                last_wpm_update = current_time
-        else:
-            remaining = TIME_LIMIT
-            wpm = 0
-
+        # Timer and WPM
         timer = font.render(f"Time: {int(remaining)}", True, BLACK)
         wpm_display = font.render(f"WPM: {int(wpm)}", True, BLACK)
         screen.blit(timer, (WIDTH - 200, 40))

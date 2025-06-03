@@ -142,7 +142,7 @@ def save_reaction_time(user_id, reaction_time):
         if 'db' in locals() and db:
             db.close()
 
-def save_wpm_score(user_id, words_per_minute):
+def save_wpm_score(user_id, final_wpm):
     """
     Save a typing speed score into the database.
 
@@ -158,7 +158,7 @@ def save_wpm_score(user_id, words_per_minute):
             INSERT INTO TypingGame (User_Id, Words_Per_Minute)
             VALUES (%s, %s)
         """
-        cursor.execute(query, (user_id, words_per_minute))
+        cursor.execute(query, (user_id, final_wpm))
         db.commit()
         print("WPM score saved successfully!")
     except Error as err:
