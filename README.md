@@ -93,6 +93,32 @@ CREATE TABLE ReactionTime (
 
 ---
 
+### ⌨️ TypingGame Table
+
+The `TypingGame` table stores data related to the Typing Speed game, tracking how fast a user can type in words per minute (WPM). Each entry is tied to a specific user and timestamped.
+
+```sql
+CREATE TABLE TypingGame (
+    TG_Score_Id INT NOT NULL AUTO_INCREMENT,
+    User_Id INT NOT NULL,
+    Words_Per_Minute INT NOT NULL,
+    Score_Time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (TG_Score_Id),
+    FOREIGN KEY (User_Id) REFERENCES Users(User_Id)
+);
+```
+### Columms:
+
+- **TG_Score_Id**: Primary key, auto-incremented unique identifier for each typing score entry.
+- **User_Id**: Foreign key referencing the`1User_Id` in the `Users` table. Identifies the user who completed the typing test.
+- **Words_Per_Minute**: Number of words typed per minute, representing the user's typing speed.
+- **Score_Time**: Number of words typed per minute, representing the user's typing speed.
+- **Primary Key**: `TG_Score_Id`, ensures uniqueness of score entries.
+- **Foreign Key**: Ensures only valid users can have associated scores.
+
+---
+
+
 ### TypingGame Table
 
 The `TypingGame` table stores data related to the Typing Speed game, tracking how fast a user can type in words per minute (WPM). Each entry is tied to a specific user and timestamped.
@@ -138,6 +164,7 @@ CREATE TABLE TypingGame (
 
 - **Open Source Community**: 
   - A huge thanks to the open-source community for their contributions and support. This project wouldn't be possible without the contributions of countless developers.
+
 
 ## License
 

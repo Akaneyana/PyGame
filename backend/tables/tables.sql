@@ -3,7 +3,7 @@ CREATE DATABASE IF NOT EXISTS PyGame;
 USE PyGame;
 
 CREATE TABLE Users (
-    User_id INT NOT NULL AUTO_INCREMENT,
+    User_Id INT NOT NULL AUTO_INCREMENT,
     Name VARCHAR(80) NOT NULL,
     Password_hash VARCHAR(300) NOT NULL, 
     Email VARCHAR(100) NOT NULL, 
@@ -14,9 +14,18 @@ CREATE TABLE Users (
 
 CREATE TABLE ReactionTime (
     RT_Score_Id int NOT NULL AUTO_INCREMENT,
-    User_id int NOT NULL,
+    User_Id int NOT NULL,
     Reaction_Time_ms int NOT NULL,
     Score_set TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (RT_Score_Id),
-    FOREIGN KEY (User_id) REFERENCES Users(User_id)
+    FOREIGN KEY (User_Id) REFERENCES Users(User_Id)
+);
+
+CREATE TABLE TypingGame (
+    TG_Score_Id INT NOT NULL AUTO_INCREMENT,
+    User_Id INT NOT NULL,
+    Words_Per_Minute INT NOT NULL,
+    Score_Time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (TG_Score_Id),
+    FOREIGN KEY (User_Id) REFERENCES Users(User_Id)
 );
