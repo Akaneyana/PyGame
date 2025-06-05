@@ -24,6 +24,11 @@
 -  Database connection for storing user data (e.g., scores, profiles).
 -  Scalable database schema for future expansion.
 
+## Games Documentation
+Detailed instructions for each game can be found in their respective directories:
+- [Reaction Time Game](frontend/games/reactionTimeGame/README.md)
+- [Typing Game](frontend/games/typingGame/README.md)
+
 ---
 
 # Database Schema
