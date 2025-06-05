@@ -17,10 +17,6 @@ Test and improve your typing speed by typing words that appear on screen. Track 
 - Keyboard: Type the displayed words
 - Space: Submit word/Move to next word
 
-## Tips
-- Look at the next word while typing
-- Maintain proper typing posture
-
 ## Score System
 - WPM (Words Per Minute) calculation
 - Final score saved to profile when logged in

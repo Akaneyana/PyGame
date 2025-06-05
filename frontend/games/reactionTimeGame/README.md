@@ -17,11 +17,6 @@ A fast-paced game that tests your reaction speed by challenging you to click as 
 ## Controls
 - Mouse Click: Primary interaction
 
-## Tips
-- Stay focused on the screen
-- Don't try to predict the timing
-- Take breaks between attempts for best results
-
 ## Score System
 - Times are measured in milliseconds (ms)
 - Lower scores are better
